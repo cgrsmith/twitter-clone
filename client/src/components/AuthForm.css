@@ -2,17 +2,17 @@
 .authForm {
     max-width: 300px;
     margin: auto;
+
 }
 
 .authForm h2{
+    text-align: center;
     margin-bottom: 2rem;
     color : rgb(1, 64, 182);  
 }
 
 .authForm form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: left;
 }
 
 .authForm input {
@@ -23,6 +23,8 @@
 }
 
 .authForm button {
+    display: block;
+    margin: auto;
     margin-top: 2rem;
     padding: 8px;
 

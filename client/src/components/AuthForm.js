@@ -26,12 +26,17 @@ class AuthForm extends Component {
         if (this.props.signup) {
             if (this.state.password.length < 6) {
                 console.log("password must be longer than 6");
-            }
-            if (this.state.password !== this.state.confirmPassword) {
+            } else if (this.state.password !== this.state.confirmPassword) {
                 console.log("passwords must match");
+            } else {
+                this.props.onAuth("signup", this.state).then(() => {
+                    console.log("signed up");
+                });
             }
         } else {
-
+            this.props.onAuth("signin", this.state).then(() => {
+                console.log("signed up");
+            });
         }
     }
 
@@ -42,22 +47,28 @@ class AuthForm extends Component {
                     <h2>
                         {(this.props.signup) ? "Sign up now!" : "Sign in"}
                     </h2>
+
                     <input type="text" placeholder="Enter your Email Address" name="email" value={this.state["email"]} 
                         onChange={this.handleChange} required/>
+
                     {this.props.signup && (
                     <input type="text" placeholder="Enter your Username" name="username" value={this.state["username"]} 
                         onChange={this.handleChange} required/>
                     )}
+
                     {this.props.signup && (
                     <input type="text" placeholder="Enter a profile image url" name="profileImageUrl" value={this.state["profileImageUrl"]} 
                         onChange={this.handleChange} />
                     )}
+
                     <input type="password" placeholder="Enter your Password" name="password" value={this.state["password"]} 
                         onChange={this.handleChange} required/>
+
                     {this.props.signup && (
                     <input type="password" placeholder="Confirm your Password" name="confirmPassword" value={this.state["confirmPassword"]} 
                         onChange={this.handleChange} required/>
                     )}
+                    
                     <button type="submit">
                         {(this.props.signup) ? "Sign Up" : "Sign In"}
                     </button>
