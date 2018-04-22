@@ -3,7 +3,7 @@ const router = express.Router({mergeParams : true});
 
 const {createMessage, getMessage, deleteMessage} = require("../handlers/messages");
 
-//prefixed routes with /api/users/:id/messages/
+//prefixed routes with /api/user/:id/messages/
 router.route("/").post(createMessage);
 
 

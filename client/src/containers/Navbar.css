@@ -4,6 +4,7 @@ nav {
     max-width: 800px;
     height: 80px;
     margin: auto;
+    padding: 10px;
     display : flex;
     flex-direction: row;
     justify-content: space-between;
@@ -64,6 +65,6 @@ nav .navLink:visited {
 }
 
 .navWrap {
-    background-color: rgb(1, 64, 182);
+    background: linear-gradient(to bottom, rgb(73, 115, 194), rgb(1, 64, 182));
     margin-bottom: 1rem;
 }

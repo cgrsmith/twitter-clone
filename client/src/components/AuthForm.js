@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 
 import "./AuthForm.css";
 
+const MIN_CHARS = 6;
+
 class AuthForm extends Component {
     constructor(props){
         super(props);
@@ -24,57 +26,90 @@ class AuthForm extends Component {
     handleSubmit(e) {
         e.preventDefault();
         if (this.props.signup) {
-            if (this.state.password.length < 6) {
-                console.log("password must be longer than 6");
+            if (this.state.password.length < MIN_CHARS) {
+                this.props.addError("Password must be longer than " + MIN_CHARS +" characters");
             } else if (this.state.password !== this.state.confirmPassword) {
-                console.log("passwords must match");
+                this.props.addError("Passwords must match");
             } else {
-                this.props.onAuth("signup", this.state).then(() => {
-                    console.log("signed up");
-                });
+                this.props.onAuth("signup", this.state)
+                    .then(() => {
+                        this.props.history.push("/");
+                    })
+                    .catch(err =>{
+                        return err;
+                    });
             }
         } else {
-            this.props.onAuth("signin", this.state).then(() => {
-                console.log("signed up");
-            });
+            this.props.onAuth("signin", this.state)
+                .then(() => {
+                    this.props.history.push("/");
+                })
+                .catch(err =>{
+                    return err;
+                });
         }
     }
 
     render() {
+        this.props.history.listen(() => {
+            this.props.removeError();
+        });
+
         return (
-            <main className="authForm">
-                <form onSubmit={this.handleSubmit}>
-                    <h2>
-                        {(this.props.signup) ? "Sign up now!" : "Sign in"}
-                    </h2>
+            <div>
+                <main className="authForm">
+                    <form onSubmit={this.handleSubmit}>
+                        <h2>
+                            {(this.props.signup) ? "Sign up now!" : "Sign in"}
+                        </h2>
+                        {this.props.errors.message && (
+                            <div className="errorBox">
+                                {this.props.errors.message}
+                            </div>
+                        )}
 
-                    <input type="text" placeholder="Enter your Email Address" name="email" value={this.state["email"]} 
-                        onChange={this.handleChange} required/>
+                        <div className="formSection">
+                            <label>Email Address:</label>
+                            <input type="text" placeholder="" name="email" value={this.state["email"]} 
+                                onChange={this.handleChange} required/>
+                        </div>
 
-                    {this.props.signup && (
-                    <input type="text" placeholder="Enter your Username" name="username" value={this.state["username"]} 
-                        onChange={this.handleChange} required/>
-                    )}
+                        {this.props.signup && (
+                        <div className="formSection">
+                            <label>Username:</label>   
+                            <input type="text" placeholder="" name="username" value={this.state["username"]} 
+                                onChange={this.handleChange} required/>
+                        </div>
+                        )}
 
-                    {this.props.signup && (
-                    <input type="text" placeholder="Enter a profile image url" name="profileImageUrl" value={this.state["profileImageUrl"]} 
-                        onChange={this.handleChange} />
-                    )}
+                        {this.props.signup && (
+                        <div className="formSection">
+                            <label>Profile Image URL:</label>   
+                            <input type="text" placeholder="" name="profileImageUrl" value={this.state["profileImageUrl"]} 
+                                onChange={this.handleChange} />
+                        </div>
+                        )}
+                        <div className="formSection">
+                            <label>Password:</label>   
+                            <input type="password" placeholder="" name="password" value={this.state["password"]} 
+                                onChange={this.handleChange} required/>
+                        </div>
 
-                    <input type="password" placeholder="Enter your Password" name="password" value={this.state["password"]} 
-                        onChange={this.handleChange} required/>
+                        {this.props.signup && (
+                        <div className="formSection">
+                            <label>Confirm Password:</label>   
+                            <input type="password" placeholder="" name="confirmPassword" value={this.state["confirmPassword"]} 
+                                onChange={this.handleChange} required/>
+                        </div>
+                        )}
+                        
+                        <button type="submit">
+                            {(this.props.signup) ? "Sign Up" : "Sign In"}
+                        </button>
 
-                    {this.props.signup && (
-                    <input type="password" placeholder="Confirm your Password" name="confirmPassword" value={this.state["confirmPassword"]} 
-                        onChange={this.handleChange} required/>
-                    )}
-                    
-                    <button type="submit">
-                        {(this.props.signup) ? "Sign Up" : "Sign In"}
-                    </button>
-
-                </form>
-            </main>
+                    </form>
+                </main>
+            </div>
         )
     }
 }
